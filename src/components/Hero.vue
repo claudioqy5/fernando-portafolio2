@@ -218,15 +218,47 @@ onMounted(() => {
     flex-direction: column;
     text-align: center;
     padding-top: 120px;
+    justify-content: center;
   }
   
   .hero-typography {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   
   .vertical-text {
     align-items: center;
-    font-size: 5rem;
+    font-size: clamp(2rem, 12vw, 4rem);
+    text-align: center;
+  }
+
+  .hero-slogan {
+    white-space: normal; /* Allow wrap on mobile */
+    text-align: center;
+    letter-spacing: 0.2rem;
+    font-size: 0.9rem;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .typing-text {
+    text-align: center;
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .vertical-text {
+    font-size: clamp(1.8rem, 15vw, 3rem);
+  }
+  
+  .hero-slogan {
+    letter-spacing: 0.1rem;
+    font-size: 0.8rem;
   }
 }
 </style>

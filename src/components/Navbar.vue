@@ -8,17 +8,18 @@
       
       <!-- Centered Navigation -->
       <ul class="nav-links" :class="{ 'active': isMenuOpen }">
-        <li><a href="#hero" @click="closeMenu">HOME</a></li>
-        <li><a href="#projects" @click="closeMenu">PROJECTS</a></li>
-        <li><a href="#about" @click="closeMenu">ABOUT</a></li>
-        <li><a href="#process" @click="closeMenu">PROCESS</a></li>
+        <li><a href="#hero" @click="closeMenu">Inicio</a></li>
+        <li><a href="#projects" @click="closeMenu">¿Que hacemos?</a></li>
+        <li><a href="#about" @click="closeMenu">Servicios</a></li>
+        <li><a href="#process" @click="closeMenu">¿Quiénes somos?</a></li>
+        <li><a href="#contact" @click="closeMenu">Contacto</a></li>
         <!-- Mobile only link for Contact -->
         <li class="mobile-only"><a href="#contact" @click="closeMenu">CONTACT</a></li>
       </ul>
 
       <!-- Right CTA -->
       <div class="nav-right">
-        <a href="#contact" class="nav-cta">CONTACT ME</a>
+        <a href="#contact" class="nav-cta">CONTÁCTANOS</a>
         <div class="menu-toggle" @click="toggleMenu">
           <div class="bar" :class="{ 'open': isMenuOpen }"></div>
         </div>
@@ -71,7 +72,7 @@ onUnmounted(() => {
 
 .navbar.scrolled {
   padding: 1rem 0;
-  background: rgba(5, 5, 5, 0.85);
+  background: rgba(10, 10, 10, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);

@@ -2,8 +2,9 @@
   <div class="app-wrapper">
     <Navbar />
     <Hero />
-    <About />
     <Projects />
+    <About />
+    <WhoWeAre />
     <Footer />
   </div>
 </template>
@@ -14,6 +15,7 @@ import Navbar from './components/Navbar.vue';
 import Hero from './components/Hero.vue';
 import About from './components/About.vue';
 import Projects from './components/Projects.vue';
+import WhoWeAre from './components/WhoWeAre.vue';
 import Footer from './components/Footer.vue';
 
 onMounted(() => {

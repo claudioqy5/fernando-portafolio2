@@ -1,37 +1,50 @@
 <template>
   <section id="projects" class="projects">
-    <div class="container">
-      <h2 class="section-title fade-up">Proyectos Destacados</h2>
-      
-      <div class="filter-tabs fade-up">
-        <button 
-          v-for="cat in categories" 
-          :key="cat.id" 
-          @click="activeCategory = cat.id"
-          :class="{ 'active': activeCategory === cat.id }"
-        >
-          {{ cat.name }}
-        </button>
+    <!-- Crossed Marquee Background -->
+    <div class="marquee-x-background">
+      <div class="marquee-container pos-rotated">
+        <div class="marquee-track">
+          <div class="marquee-content">
+            <span v-for="(item, index) in [...items, ...items, ...items]" :key="index" class="marquee-item">
+              {{ item }} <span class="separator">/</span>
+            </span>
+          </div>
+        </div>
       </div>
+      
+      <div class="marquee-container neg-rotated">
+        <div class="marquee-track reverse-anim">
+          <div class="marquee-content">
+            <span v-for="(item, index) in [...itemsReverse, ...itemsReverse, ...itemsReverse]" :key="index" class="marquee-item italic">
+              {{ item }} <span class="separator">/</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
 
-      <div class="projects-grid">
-        <div 
-          v-for="project in filteredProjects" 
-          :key="project.id" 
-          class="project-card glass fade-up"
-        >
-          <div class="project-img">
-            <div class="img-placeholder">{{ project.type }}</div>
-            <div class="project-overlay">
-              <a :href="project.link" class="btn btn-primary">Ver Demo</a>
+    <!-- Content Overlay -->
+    <div class="container content-overlay">
+      <div class="text-block-right" :class="{ 'visible': isVisible }">
+        <h2 class="section-title">¿Que hacemos?</h2>
+        <p class="description">
+          En Helify fusionamos <span>diseño editorial</span> con <span>arquitectura de software</span> de vanguardia. 
+          Desarrollamos ecosistemas digitales que no solo capturan la atención, sino que están construidos para escalar y perdurar.
+        </p>
+        
+        <div class="mini-grid">
+          <div class="mini-item">
+            <span class="dot"></span>
+            <div>
+              <h4>Desarrollo Web</h4>
+              <p>Experiencias inmersivas y optimizadas.</p>
             </div>
           </div>
-          <div class="project-info">
-            <span class="p-category">{{ project.type }}</span>
-            <h3>{{ project.title }}</h3>
-            <p>{{ project.description }}</p>
-            <div class="p-tags">
-              <span v-for="tag in project.tags" :key="tag">{{ tag }}</span>
+          <div class="mini-item">
+            <span class="dot"></span>
+            <div>
+              <h4>Automatización</h4>
+              <p>Eficiencia pura para tus procesos.</p>
             </div>
           </div>
         </div>
@@ -41,187 +54,201 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 
-const activeCategory = ref('all');
-
-const categories = [
-  { id: 'all', name: 'Todos' },
-  { id: 'landing', name: 'Landing Pages' },
-  { id: 'webapp', name: 'Aplicaciones Web' },
-  { id: 'automation', name: 'Automatizaciones' },
-  { id: 'ecommerce', name: 'eCommerce' }
-];
-
-const projects = [
-  {
-    id: 1,
-    title: 'Landing Page Pharma',
-    type: 'Landing Pages',
-    category: 'landing',
-    description: 'Propuesta de alto impacto enfocada en conversión para industria médica.',
-    tags: ['Vue.js', 'GSAP', 'CSS3'],
-    link: '#'
-  },
-  {
-    id: 2,
-    title: 'SaaS Dashboard',
-    type: 'Aplicaciones Web',
-    category: 'webapp',
-    description: 'Sistema administrativo con visualización de datos en tiempo real.',
-    tags: ['React', 'Node.js', 'Chart.js'],
-    link: '#'
-  },
-  {
-    id: 3,
-    title: 'Bot de Reservas WhatsApp',
-    type: 'Automatizaciones',
-    category: 'automation',
-    description: 'Automatización completa de flujo de citas para clínicas locales.',
-    tags: ['n8n', 'Node.js', 'API'],
-    link: '#'
-  },
-  {
-    id: 4,
-    title: 'Fashion Store',
-    type: 'eCommerce',
-    category: 'ecommerce',
-    description: 'Tienda online optimizada para dispositivos móviles y SEO.',
-    tags: ['Shopify', 'Liquid', 'JS'],
-    link: '#'
-  }
-];
-
-const filteredProjects = computed(() => {
-  if (activeCategory.value === 'all') return projects;
-  return projects.filter(p => p.category === activeCategory.value);
-});
+const isVisible = ref(false);
 
 onMounted(() => {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('visible');
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  setTimeout(() => {
+    isVisible.value = true;
+  }, 100);
 });
+
+const items = ["LANDING PAGES", "AUTOMATIZACIONES", "APLICACIONES WEB", "eCOMMERCE", "SISTEMAS SaaS"];
+const itemsReverse = ["UI/UX DESIGN", "OPTIMIZACIÓN SEO", "INTEGRACIONES API", "CLOUD ARCHITECTURE", "CYBERSECURITY"];
 </script>
 
 <style scoped>
-.filter-tabs {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 4rem;
-  flex-wrap: wrap;
-}
-
-.filter-tabs button {
-  padding: 0.6rem 1.5rem;
-  background: transparent;
-  color: var(--text-secondary);
-  border: 1px solid var(--glass-border);
-  border-radius: 50px;
-  font-size: 0.9rem;
-}
-
-.filter-tabs button.active {
-  background: var(--accent-primary);
-  color: white;
-  border-color: var(--accent-primary);
-}
-
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 2.5rem;
-}
-
-.project-card {
+.projects {
+  padding: 15rem 0;
+  min-height: 90vh;
+  background-color: var(--bg-primary);
   overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  scroll-margin-top: 100px;
+}
+
+/* Marquee X Style */
+.marquee-x-background {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150vw;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.15; /* Subdued background effect */
+}
+
+.marquee-container {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  padding: 1rem 0;
+}
+
+.pos-rotated {
+  transform: rotate(10deg) translateY(-50PX);
+}
+
+.neg-rotated {
+  transform: rotate(-10deg) translateY(50PX);
+}
+
+.marquee-track {
+  display: flex;
+  white-space: nowrap;
+  animation: marquee 50s linear infinite;
+}
+
+.reverse-anim {
+  animation-direction: reverse;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.33%); }
+}
+
+.marquee-item {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  padding: 0 2rem;
+  letter-spacing: 2px;
+}
+
+.italic {
+  font-style: italic;
+  font-weight: 400;
+  -webkit-text-stroke: 1px var(--text-primary);
+  color: transparent;
+}
+
+.separator {
+  margin-left: 2rem;
+  color: var(--accent-primary);
+}
+
+/* Content Overlay */
+.content-overlay {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.text-block-right {
+  max-width: 500px;
+  text-align: right;
+  background: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(20px);
+  padding: 3.5rem;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transform: translateX(50px);
+  transition: all 1s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.text-block-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.section-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  margin-bottom: 2rem;
+  color: var(--text-primary);
+  text-transform: uppercase;
+}
+
+.description {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin-bottom: 3rem;
+}
+
+.description span {
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.mini-grid {
   display: flex;
   flex-direction: column;
-  transition: transform 0.4s ease;
+  gap: 2rem;
+  align-items: flex-end;
 }
 
-.project-card:hover {
-  transform: translateY(-10px);
-}
-
-.project-img {
-  height: 220px;
-  background: var(--bg-secondary);
-  position: relative;
-  overflow: hidden;
-}
-
-.img-placeholder {
-  width: 100%;
-  height: 100%;
+.mini-item {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  gap: 1.5rem;
+  align-items: flex-start;
+  text-align: right;
+}
+
+.mini-item h4 {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  margin-bottom: 0.3rem;
+}
+
+.mini-item p {
   font-size: 0.9rem;
   color: var(--text-secondary);
-  background: linear-gradient(45deg, #1a1a1e, #25252b);
 }
 
-.project-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(10, 10, 12, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: 0.3s;
+.dot {
+  width: 8px;
+  height: 8px;
+  background: var(--accent-primary);
+  border-radius: 50%;
+  margin-top: 0.5rem;
 }
 
-.project-card:hover .project-overlay {
-  opacity: 1;
-}
-
-.project-info {
-  padding: 2rem;
-  flex-grow: 1;
-}
-
-.p-category {
-  color: var(--accent-primary);
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-h3 {
-  margin-bottom: 1rem;
-}
-
-p {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  margin-bottom: 1.5rem;
-}
-
-.p-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.p-tags span {
-  font-size: 0.75rem;
-  padding: 0.3rem 0.8rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 4px;
-}
-
-@media (max-width: 480px) {
-  .projects-grid {
-    grid-template-columns: 1fr;
+@media (max-width: 1024px) {
+  .projects {
+    padding: 10rem 0;
+  }
+  
+  .content-overlay {
+    justify-content: center;
+  }
+  
+  .text-block-right {
+    text-align: center;
+    max-width: 100%;
+  }
+  
+  .mini-grid {
+    align-items: center;
+  }
+  
+  .mini-item {
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .marquee-x-background {
+    width: 200vw;
   }
 }
 </style>

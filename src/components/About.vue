@@ -2,7 +2,7 @@
   <section id="about" class="about">
     <div class="container about-grid">
       <div class="about-text fade-up" ref="aboutText">
-        <h2 class="section-title text-left">Sobre mí</h2>
+        <h2 class="section-title text-left">SERVICIOS</h2>
         <p class="highlight-p">
           Soy Fernando, un apasionado de la tecnología con un enfoque práctico: 
           <strong>creo soluciones que funcionan.</strong>

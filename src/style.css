@@ -2,16 +2,15 @@
 
 :root {
   /* Color Palette */
-  --bg-primary: #0a0a0c;
-  --bg-secondary: #141417;
-  --accent-primary: #3b82f6;
-  /* Electric Blue */
-  --accent-secondary: #8b5cf6;
-  /* Vibrant Purple */
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #141414;
+  --accent-primary: #bfa280;
+  /* Champagne Gold */
+  --accent-secondary: #d4b996;
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa;
   --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.08);
 
   /* Typography */
   --font-main: 'Inter', sans-serif;
@@ -45,6 +44,7 @@ h4 {
   font-family: var(--font-heading);
   font-weight: 700;
   line-height: 1.2;
+  color: var(--text-primary);
 }
 
 a {
@@ -95,6 +95,7 @@ button,
 .container {
   max-width: 1400px;
   margin: 0 auto;
+  padding: 0 5%;
 }
 
 section {

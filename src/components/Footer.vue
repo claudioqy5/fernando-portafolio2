@@ -20,8 +20,7 @@
     <div class="container footer-content">
       <div class="footer-brand">
         <div class="logo">
-          <span class="logo-dot"></span>
-          Fernando
+          <img src="../assets/helify.png" alt="Helify Logo" class="logo-img" />
         </div>
         <p>Soluciones digitales a medida.</p>
       </div>
@@ -91,20 +90,13 @@
 }
 
 .footer-brand .logo {
-  font-size: 1.5rem;
-  font-family: var(--font-heading);
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
-.logo-dot {
-  width: 8px;
-  height: 8px;
-  background: var(--accent-primary);
-  border-radius: 50%;
+.logo-img {
+  height: 35px;
+  width: auto;
+  object-fit: contain;
 }
 
 .footer-brand p {
@@ -141,18 +133,30 @@
 }
 
 @media (max-width: 768px) {
+  .cta {
+    padding: 4rem 5%;
+  }
+
+  .cta-card {
+    padding: 3rem 1.5rem;
+  }
+
   .footer-content {
     flex-direction: column;
     text-align: center;
     gap: 3rem;
   }
   
-  .logo {
-    justify-content: center;
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   
   .footer-links {
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
   }
 }
 </style>
