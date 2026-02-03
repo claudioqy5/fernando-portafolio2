@@ -1,5 +1,6 @@
 <template>
-  <Navbar />
+  <Preloader :show="showPreloader" />
+  <Navbar v-if="!showPreloader" />
   
   <div class="app-wrapper" :class="{ 'is-loaded': isLoaded }">
     <Hero />
@@ -75,8 +76,10 @@ import About from './components/About.vue';
 import Projects from './components/Projects.vue';
 import WhoWeAre from './components/WhoWeAre.vue';
 import Footer from './components/Footer.vue';
+import Preloader from './components/Preloader.vue';
 
 const isLoaded = ref(false);
+const showPreloader = ref(true);
 const showModal = ref(false);
 
 const serviceForm = ref({
@@ -110,9 +113,15 @@ const sendServiceRequest = () => {
 };
 
 onMounted(() => {
+  // Preloader Sequence
   setTimeout(() => {
-    isLoaded.value = true;
-  }, 100);
+    showPreloader.value = false;
+    
+    // Once preloader starts hiding, prepare content
+    setTimeout(() => {
+      isLoaded.value = true;
+    }, 500); 
+  }, 2500); // Intro duration
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
