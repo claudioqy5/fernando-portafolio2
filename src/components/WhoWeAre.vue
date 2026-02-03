@@ -1,45 +1,69 @@
 <template>
-  <section id="process" class="who-we-are">
-    <div class="container content-wrapper">
-      <div class="text-side fade-up">
-        <h2 class="section-title text-left">¿QUIÉNES SOMOS?</h2>
-        <div class="editorial-text">
-          <p class="large-text">
-            Un equipo de <span>expertos digitales</span> dedicados a convertir ideas en arquitecturas tecnológicas de alto rendimiento.
-          </p>
-          <p class="description">
-            En Helify, no solo construimos software, diseñamos el futuro de tu negocio. Nuestra pasión por la ingeniería y el diseño nos permite crear herramientas que no solo se ven bien, sino que impulsan resultados tangibles.
+  <section id="process" class="who-we-are-section">
+    <!-- Background Moving Text (X-Shape Effect) -->
+    <div class="bg-marquee-container">
+      <div class="bg-marquee-row row-1">
+        <div class="marquee-inner">
+          <span v-for="n in 10" :key="'bg-l1-'+n">HELIFY — INNOVACIÓN — INGENIERÍA — FUTURO — IMPACTO — </span>
+        </div>
+        <div class="marquee-inner">
+          <span v-for="n in 10" :key="'bg-l2-'+n">HELIFY — INNOVACIÓN — INGENIERÍA — FUTURO — IMPACTO — </span>
+        </div>
+      </div>
+      <div class="bg-marquee-row row-2">
+        <div class="marquee-inner">
+          <span v-for="n in 10" :key="'bg-r1-'+n">CREATIVIDAD — ESTRATEGIA — DISEÑO — EXCELENCIA — SIMPLE — </span>
+        </div>
+        <div class="marquee-inner">
+          <span v-for="n in 10" :key="'bg-r2-'+n">CREATIVIDAD — ESTRATEGIA — DISEÑO — EXCELENCIA — SIMPLE — </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="container relative-content">
+      <!-- Massive Heading (Minimalist) -->
+      <div class="header-content fade-up" ref="headerRef">
+        <h2 class="massive-title">
+          IDEALIZAMOS<br/>
+          EL FUTURO
+        </h2>
+        <div class="intro-box">
+          <p class="intro-text">
+            Somos una boutique de ingeniería digital enfocada en la simplicidad, la utilidad y el alto rendimiento.
           </p>
         </div>
-        
-        <div class="values-grid">
-          <div class="value-card glass">
-            <span class="value-index">01</span>
-            <h4>Innovación</h4>
-            <p>Siempre a la vanguardia de las últimas tecnologías.</p>
-          </div>
-          <div class="value-card glass">
-            <span class="value-index">02</span>
-            <h4>Calidad</h4>
-            <p>Estructuras robustas y código limpio por defecto.</p>
-          </div>
-          <div class="value-card glass">
-            <span class="value-index">03</span>
-            <h4>Compromiso</h4>
-            <p>Tu éxito es nuestra principal métrica de desempeño.</p>
+      </div>
+
+      <!-- Split Layout: Story & Values -->
+      <div class="content-grid">
+        <div class="story-column fade-up">
+          <h3 class="side-heading">Nuestra Filosofía</h3>
+          <p class="story-text">
+            No somos una agencia convencional. En Helify, creemos que la tecnología debe ser invisible: una herramienta tan bien diseñada que simplemente funciona sin que tengas que pensar en ella.
+          </p>
+          <p class="story-text">
+            Combinamos el rigor técnico con una visión de negocio disruptiva para entregar productos que no solo cumplen expectativas, sino que redefinen estándares.
+          </p>
+        </div>
+
+        <div class="values-column">
+          <div v-for="(value, index) in values" :key="index" class="value-item fade-up">
+            <div class="value-top">
+              <span class="value-index">0{{ index + 1 }}</span>
+              <h4 class="value-title">{{ value.title }}</h4>
+            </div>
+            <p class="value-desc">{{ value.desc }}</p>
           </div>
         </div>
       </div>
-      
-      <div class="visual-side fade-up">
-        <div class="floating-image-container">
-          <!-- Placeholder or decoration to maintain the editorial look -->
-          <div class="tech-shape shape-1"></div>
-          <div class="tech-shape shape-2"></div>
-          <div class="glass burst-shape">
-            <span class="big-number">8+</span>
-            <span class="label">Años creando impacto</span>
-          </div>
+
+      <!-- Premium Visual Element (Innovative Separator) -->
+      <div class="visual-footer fade-up">
+        <div class="line-reveal"></div>
+        <div class="footer-meta">
+          <span>BASADOS EN LA EXCELENCIA</span>
+          
+          <span>IMPULSANDO EL ÉXITO</span>
         </div>
       </div>
     </div>
@@ -47,157 +71,259 @@
 </template>
 
 <script setup>
-// Logic for reveal animations if needed
+import { onMounted, ref } from 'vue';
+
+const headerRef = ref(null);
+const values = [
+  { title: 'Innovación Real', desc: 'No usamos tecnología por moda, la usamos para resolver necesidades que otros no pueden.' },
+  { title: 'Ingeniería Ética', desc: 'Código limpio, arquitecturas escalables y transparencia total en cada paso.' },
+  { title: 'Visión Global', desc: 'Diseñamos soluciones pensadas para crecer y dominar mercados competitivos.' }
+];
+
+onMounted(() => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+});
 </script>
 
 <style scoped>
-.who-we-are {
-  background-color: var(--bg-primary);
+.who-we-are-section {
+  background-color: #ffffff;
+  color: #000000;
+  padding: 160px 0;
+  min-height: 100vh;
   position: relative;
-  overflow: hidden;
+  overflow: hidden; /* Critical for background marquee */
 }
 
-.content-wrapper {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 6rem;
+.relative-content {
+  position: relative;
+  z-index: 10;
+}
+
+/* Background X Marquee */
+.bg-marquee-container {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  opacity: 0.08; /* Very subtle background presence */
+  pointer-events: none;
 }
 
-.large-text {
-  font-size: clamp(1.5rem, 3vw, 2.5rem);
-  font-weight: 600;
-  line-height: 1.3;
-  margin-bottom: 2rem;
-  color: var(--text-primary);
+.bg-marquee-row {
+  display: flex;
+  white-space: nowrap;
+  font-family: var(--font-heading);
+  font-size: 8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -2px;
 }
 
-.large-text span {
-  color: var(--accent-primary);
+.row-1 {
+  transform: rotate(-12deg) translateY(-100px);
 }
 
-.description {
-  font-size: 1.15rem;
-  color: var(--text-secondary);
-  line-height: 1.8;
-  margin-bottom: 3.5rem;
-  max-width: 650px;
+.row-2 {
+  transform: rotate(8deg) translateY(100px);
+  margin-top: 0; /* Removed negative margin to allow more natural separation */
 }
 
-.values-grid {
+.row-1 .marquee-inner {
+  display: flex;
+  animation: scroll-left-bg 120s linear infinite;
+}
+
+.row-2 .marquee-inner {
+  display: flex;
+  animation: scroll-right-bg 120s linear infinite;
+}
+
+.marquee-inner span {
+  padding-right: 80px;
+}
+
+@keyframes scroll-left-bg {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes scroll-right-bg {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 5%;
+}
+
+.header-content {
+  margin-bottom: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.massive-title {
+  font-family: var(--font-heading);
+  font-size: clamp(4rem, 15vw, 12rem);
+  font-weight: 300;
+  line-height: 0.85;
+  letter-spacing: -0.06em;
+  color: #000;
+  margin: 0;
+}
+
+.intro-box {
+  border-left: 2px solid #000;
+  padding-left: 40px;
+  max-width: 600px;
+}
+
+.intro-text {
+  font-size: 1.5rem;
+  line-height: 1.4;
+  font-weight: 500;
+  color: #000;
+}
+
+/* Content Grid */
+.content-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 120px;
+  margin-top: 60px;
 }
 
-.value-card {
-  padding: 1.5rem;
-  border-radius: 12px;
-  transition: transform 0.3s ease;
+.side-heading {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 30px;
 }
 
-.value-card:hover {
-  transform: translateY(-5px);
+.story-text {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: #333;
+  margin-bottom: 30px;
+  max-width: 500px;
+}
+
+.values-column {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.value-item {
+  border-bottom: 1px solid #000;
+  padding-bottom: 30px;
+  transition: all 0.4s ease;
+}
+
+.value-item:hover {
+  padding-left: 20px;
+  border-bottom-width: 3px;
+}
+
+.value-top {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 15px;
 }
 
 .value-index {
   font-family: var(--font-heading);
-  font-size: 0.8rem;
-  color: var(--accent-primary);
+  font-size: 0.9rem;
   font-weight: 700;
-  margin-bottom: 1rem;
-  display: block;
+  color: #000;
 }
 
-.value-card h4 {
-  margin-bottom: 0.5rem;
-  font-size: 1.1rem;
+.value-title {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
 }
 
-.value-card p {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
+.value-desc {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+  max-width: 450px;
 }
 
-/* Visual Side Decoration */
-.visual-side {
-  position: relative;
+/* Visual Footer */
+.visual-footer {
+  margin-top: 140px;
 }
 
-.floating-image-container {
-  height: 400px;
+.line-reveal {
+  width: 100%;
+  height: 1px;
+  background-color: #000;
+  margin-bottom: 30px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fade-up.visible .line-reveal {
+  transform: scaleX(1);
+}
+
+.footer-meta {
   display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.tech-shape {
-  position: absolute;
-  border: 1px solid rgba(191, 162, 128, 0.3); /* #bfa280 with transparency */
-  width: 300px;
-  height: 300px;
-  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-  animation: morphing 10s infinite alternate;
-}
-
-.shape-2 {
-  width: 250px;
-  height: 250px;
-  border-color: rgba(255, 255, 255, 0.1);
-  animation-delay: -5s;
-}
-
-.burst-shape {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.big-number {
-  font-size: 3.5rem;
-  font-weight: 800;
-  color: var(--accent-primary);
-}
-
-.label {
+  justify-content: space-between;
+  font-family: var(--font-heading);
   font-size: 0.7rem;
-  text-transform: uppercase;
+  font-weight: 700;
   letter-spacing: 2px;
-  color: var(--text-secondary);
+  color: #888;
 }
 
-@keyframes morphing {
-  0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: rotate(0deg); }
-  100% { border-radius: 41% 59% 41% 59% / 54% 48% 52% 46%; transform: rotate(180deg); }
+/* Base Animations */
+.fade-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 @media (max-width: 1024px) {
-  .content-wrapper {
+  .content-grid {
     grid-template-columns: 1fr;
-    text-align: center;
-    gap: 4rem;
+    gap: 80px;
   }
-  
-  .description {
-    margin-inline: auto;
-  }
-  
-  .text-left {
-    text-align: center;
-  }
-  
-  .values-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .visual-side {
-    order: -1;
-  }
+  .massive-title { letter-spacing: -0.04em; }
+}
+
+@media (max-width: 768px) {
+  .who-we-are-section { padding: 100px 0; }
+  .intro-text { font-size: 1.2rem; }
+  .massive-title { font-size: 4rem; }
+  .footer-meta { flex-direction: column; gap: 10px; align-items: center; }
 }
 </style>

@@ -25,23 +25,27 @@
           <span class="word">NOSOTROS</span>
           <span class="word highlight typing-text">{{ currentPhrase }}<span class="cursor">|</span></span>
         </h1>
-        <p class="hero-slogan fade-up">
+        <p class="hero-slogan">
           Creamos experiencias digitales de alto impacto para potenciar tu negocio.
         </p>
+        <!-- Service Request Button -->
+        <button @click="openModal" class="hero-cta">
+          <span>SOLICITAR SERVICIO</span>
+          <div class="cta-line"></div>
+        </button>
       </div>
-
-
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, inject } from 'vue';
 
-const isVisible = ref(false);
+const openModal = inject('openServiceModal');
 
 const phrases = ["LO CREAMOS.", "LO DISEÑAMOS.", "LO ESCALAMOS.", "LO IMPULSAMOS."];
 const currentPhrase = ref("");
+
 let phraseIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
@@ -62,7 +66,7 @@ const typeEffect = () => {
 
   if (!isDeleting && charIndex === fullText.length) {
     isDeleting = true;
-    typingSpeed = 2000; // Pause at end
+    typingSpeed = 2000;
   } else if (isDeleting && charIndex === 0) {
     isDeleting = false;
     phraseIndex = (phraseIndex + 1) % phrases.length;
@@ -73,10 +77,7 @@ const typeEffect = () => {
 };
 
 onMounted(() => {
-  setTimeout(() => {
-    isVisible.value = true;
-    typeEffect();
-  }, 300);
+  typeEffect();
 });
 </script>
 
@@ -97,6 +98,7 @@ onMounted(() => {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
+
 .hero {
   height: 100vh;
   width: 100%;
@@ -120,7 +122,7 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.5; /* Slightly opaque to allow the black background to show through, making it darker */
+  opacity: 0.5;
 }
 
 .hero-overlay {
@@ -129,7 +131,6 @@ onMounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  /* Dark linear gradient to improve text readability and make the video feel integrated */
   background: linear-gradient(
     to bottom,
     rgba(5, 5, 5, 0.9) 0%,
@@ -158,7 +159,7 @@ onMounted(() => {
 .vertical-text {
   display: flex;
   flex-direction: column;
-  font-size: clamp(2.5rem, 8vw, 6.5rem); /* Reduced from 8.5rem */
+  font-size: clamp(2.5rem, 8vw, 6.5rem);
   line-height: 0.95;
   font-weight: 800;
   color: #fff;
@@ -171,10 +172,10 @@ onMounted(() => {
   font-size: clamp(0.8rem, 1.5vw, 1.1rem);
   color: rgba(255, 255, 255, 0.5);
   max-width: fit-content;
-  white-space: nowrap; /* Prevents line breaks */
+  white-space: nowrap;
   line-height: 1;
-  font-weight: 300; /* More elegant and light */
-  letter-spacing: 0.4rem; /* Ultra-minimalist stretched look */
+  font-weight: 300;
+  letter-spacing: 0.4rem;
   text-transform: uppercase;
   font-family: var(--font-main);
   opacity: 0;
@@ -188,6 +189,42 @@ onMounted(() => {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.hero-cta {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
+  margin-top: 50px;
+  transition: all 0.3s ease;
+  width: fit-content;
+  opacity: 0;
+  animation: sloganFadeIn 1s forwards cubic-bezier(0.2, 1, 0.3, 1);
+  animation-delay: 1.8s;
+}
+
+.cta-line {
+  width: 40px;
+  height: 2px;
+  background-color: #fff;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-cta:hover .cta-line {
+  width: 100%;
+}
+
+.hero-cta:hover {
+  letter-spacing: 5px;
 }
 
 .word {
@@ -236,13 +273,18 @@ onMounted(() => {
   }
 
   .hero-slogan {
-    white-space: normal; /* Allow wrap on mobile */
+    white-space: normal;
     text-align: center;
     letter-spacing: 0.2rem;
     font-size: 0.9rem;
     width: 100%;
     max-width: 320px;
     margin: 0 auto;
+  }
+
+  .hero-cta {
+    margin: 40px auto 0;
+    align-items: center;
   }
 
   .typing-text {

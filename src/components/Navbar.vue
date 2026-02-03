@@ -19,7 +19,12 @@
 
       <!-- Right CTA -->
       <div class="nav-right">
-        <a href="#contact" class="nav-cta">CONTÁCTANOS</a>
+        <a href="https://wa.me/51962956919?text=¡Hola Helify! 👋 Me gustaría recibir más información sobre sus servicios digitales. ¿Podrían ayudarme?" target="_blank" class="nav-cta">
+          <span>CONTÁCTANOS</span>
+          <svg class="wsp-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.767 5.767 0 1.267.405 2.436 1.091 3.388L6.5 18l2.76-.846a5.727 5.727 0 002.771.71c3.181 0 5.767-2.586 5.767-5.767 0-3.181-2.586-5.767-5.767-5.767zm3.332 7.914c-.145.41-.741.769-1.026.804-.282.034-.564.045-.899-.101-.212-.093-.849-.336-1.637-1.036-.612-.544-1.026-1.216-1.146-1.42s-.13-.341-.13-.51c0-.17.09-.255.121-.301.034-.045.074-.074.111-.11s.074-.056.111-.093c.037-.037.048-.062.074-.105.026-.045.013-.086-.007-.127s-.278-.669-.381-.918c-.1-.24-.2-.206-.278-.21h-.237c-.086 0-.224.034-.341.157s-.448.437-.448 1.063c0 .626.456 1.232.52 1.319.063.086.897 1.37 2.173 1.921s1.332.613 2.103.541c.771-.072 1.705-.694 1.946-1.362.241-.669.241-1.241.17-1.362-.072-.121-.264-.194-.555-.339z"/>
+          </svg>
+        </a>
         <div class="menu-toggle" @click="toggleMenu">
           <div class="bar" :class="{ 'open': isMenuOpen }"></div>
         </div>
@@ -108,9 +113,11 @@ onUnmounted(() => {
 }
 
 .nav-links li a {
-  font-size: 0.75rem;
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
   letter-spacing: 2px;
   transition: all 0.3s ease;
   position: relative;
@@ -142,22 +149,38 @@ onUnmounted(() => {
 }
 
 .nav-cta {
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  font-weight: 700;
   color: #fff;
-  letter-spacing: 1px;
-  padding: 0.8rem 1.8rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  letter-spacing: 2px;
+  padding: 0.7rem 1.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 99px;
-  background: rgba(255, 255, 255, 0.03);
-  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.05);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.wsp-icon {
+  width: 18px;
+  height: 18px;
+  color: #25D366; /* WhatsApp Green */
+  transition: transform 0.3s ease;
 }
 
 .nav-cta:hover {
   background: #fff;
   color: #000;
   border-color: #fff;
-  transform: translateY(-2px);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+}
+
+.nav-cta:hover .wsp-icon {
+  transform: scale(1.1) rotate(10deg);
 }
 
 .menu-toggle {
