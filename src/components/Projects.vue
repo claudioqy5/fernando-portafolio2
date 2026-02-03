@@ -77,60 +77,62 @@
       </div>
     </section>
 
-    <!-- Fullscreen Gallery Modal -->
-    <Transition name="modal">
-      <div v-if="selectedIndex !== null" class="gallery-modal" @click.self="resetSelection">
-        <div class="modal-header">
-          <div class="modal-info">
-            <span class="modal-index">CATEGORÍA 0{{ selectedIndex + 1 }}</span>
-            <h2 class="modal-title">{{ services[selectedIndex].title }}</h2>
+    <!-- Fullscreen Gallery Modal (Teleported to body to avoid transform issues) -->
+    <Teleport to="body">
+      <Transition name="modal">
+        <div v-if="selectedIndex !== null && services[selectedIndex]" class="gallery-modal" @click.self="resetSelection">
+          <div class="modal-header">
+            <div class="modal-info">
+              <span class="modal-index">CATEGORÍA 0{{ selectedIndex + 1 }}</span>
+              <h2 class="modal-title">{{ services[selectedIndex].title }}</h2>
+            </div>
+            <button class="close-gallery" @click="resetSelection">
+              <span>VOLVER</span>
+              <div class="close-icon-circle">×</div>
+            </button>
           </div>
-          <button class="close-gallery" @click="resetSelection">
-            <span>VOLVER</span>
-            <div class="close-icon-circle">×</div>
-          </button>
-        </div>
 
-        <div class="gallery-body">
-          <div class="active-media-container">
-            <Transition :name="transitionName" mode="out-in">
-              <div :key="services[selectedIndex].assets[currentAssetIndex].src" class="active-media">
-                <video 
-                  v-if="services[selectedIndex].assets[currentAssetIndex].type === 'video'"
-                  autoplay muted loop playsinline class="media-content"
+          <div class="gallery-body">
+            <div class="active-media-container">
+              <Transition :name="transitionName" mode="out-in">
+                <div :key="services[selectedIndex].assets[currentAssetIndex].src" class="active-media">
+                  <video 
+                    v-if="services[selectedIndex].assets[currentAssetIndex].type === 'video'"
+                    autoplay muted loop playsinline class="media-content"
+                  >
+                    <source :src="services[selectedIndex].assets[currentAssetIndex].src" type="video/mp4">
+                  </video>
+                  <img v-else :src="services[selectedIndex].assets[currentAssetIndex].src" class="media-content" />
+                </div>
+              </Transition>
+            </div>
+            
+            <!-- Thumbnails Track -->
+            <div class="thumbnails-container">
+              <div class="thumbnails-track">
+                <div 
+                  v-for="(asset, idx) in services[selectedIndex].assets" 
+                  :key="idx" 
+                  class="thumb"
+                  :class="{ 'active': currentAssetIndex === idx }"
+                  @click="goToAsset(idx)"
                 >
-                  <source :src="services[selectedIndex].assets[currentAssetIndex].src" type="video/mp4">
-                </video>
-                <img v-else :src="services[selectedIndex].assets[currentAssetIndex].src" class="media-content" />
-              </div>
-            </Transition>
-          </div>
-          
-          <!-- Thumbnails Track -->
-          <div class="thumbnails-container">
-            <div class="thumbnails-track">
-               <div 
-                v-for="(asset, idx) in services[selectedIndex].assets" 
-                :key="idx" 
-                class="thumb"
-                :class="{ 'active': currentAssetIndex === idx }"
-                @click="goToAsset(idx)"
-              >
-                <video v-if="asset.type === 'video'" class="thumb-media">
-                   <source :src="asset.src" type="video/mp4">
-                </video>
-                <img v-else :src="asset.src" class="thumb-media" />
-                <div v-if="asset.type === 'video'" class="play-hint">▶</div>
+                  <video v-if="asset.type === 'video'" class="thumb-media">
+                    <source :src="asset.src" type="video/mp4">
+                  </video>
+                  <img v-else :src="asset.src" class="thumb-media" />
+                  <div v-if="asset.type === 'video'" class="play-hint">▶</div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Navigation -->
-        <button class="nav-arrow prev" @click="prevAsset">‹</button>
-        <button class="nav-arrow next" @click="nextAsset">›</button>
-      </div>
-    </Transition>
+          <!-- Navigation -->
+          <button class="nav-arrow prev" @click="prevAsset">‹</button>
+          <button class="nav-arrow next" @click="nextAsset">›</button>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -301,21 +303,22 @@ onUnmounted(() => {
 .progress-bar-container { position: absolute; top: 3rem; right: 3rem; z-index: 6; display: flex; gap: 6px; }
 .progress-segment { width: 30px; height: 2px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; }
 .progress-segment.active { background: var(--accent-primary); }
-.gallery-modal { position: fixed; inset: 0; z-index: 10000; background: #080808; display: flex; flex-direction: column; }
-.modal-header { padding: 50px 80px; display: flex; justify-content: space-between; align-items: flex-end; z-index: 10; }
+.gallery-modal { position: fixed; inset: 0; z-index: 999999; background: #080808; display: flex; flex-direction: column; }
+.modal-header { padding: 30px 60px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
 .modal-index { color: var(--accent-primary); font-weight: 700; letter-spacing: 3px; font-size: 0.8rem; }
-.modal-title { font-size: clamp(2rem, 4vw, 4rem); font-weight: 800; color: #fff; line-height: 0.9; }
+.modal-title { font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 800; color: #fff; line-height: 1.1; }
 .close-gallery { background: transparent; border: none; color: #fff; display: flex; align-items: center; gap: 20px; cursor: pointer; font-weight: 700; letter-spacing: 2px; }
 .close-icon-circle { width: 60px; height: 60px; border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; transition: all 0.4s ease; }
 .close-gallery:hover .close-icon-circle { background: #fff; color: #000; }
 .gallery-body { flex: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; }
-.active-media-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 0 15%; }
-.media-content { max-width: 100%; max-height: 75vh; object-fit: contain; border-radius: 8px; box-shadow: 0 50px 100px rgba(0,0,0,1); }
+.active-media-container { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; padding: 20px 40px; overflow: hidden; }
+.active-media { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+.media-content { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 12px; box-shadow: 0 40px 80px rgba(0,0,0,0.8); }
 .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: #fff; font-size: 5rem; opacity: 0.2; cursor: pointer; z-index: 20; padding: 2rem; transition: all 0.3s; }
 .nav-arrow:hover { opacity: 1; transform: translateY(-50%) scale(1.1); }
 .prev { left: 40px; }
 .next { right: 40px; }
-.thumbnails-container { padding: 40px 0 80px; display: flex; justify-content: center; }
+.thumbnails-container { padding: 20px 0 40px; display: flex; justify-content: center; }
 .thumbnails-track { display: flex; gap: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 20px; backdrop-filter: blur(20px); }
 .thumb { width: 100px; height: 60px; border-radius: 12px; overflow: hidden; opacity: 0.3; cursor: pointer; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); border: 2px solid transparent; position: relative; }
 .thumb.active { opacity: 1; transform: scale(1.1) translateY(-5px); border-color: var(--accent-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
