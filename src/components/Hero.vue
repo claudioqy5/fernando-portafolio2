@@ -3,10 +3,12 @@
     <!-- Video Background -->
     <div class="hero-bg-wrapper">
       <video 
+        ref="videoPlayer"
         autoplay 
         muted 
         loop 
         playsinline 
+        webkit-playsinline
         class="hero-bg-video"
       >
         <source src="../assets/fondopantalla.mp4" type="video/mp4">
@@ -42,6 +44,7 @@
 import { ref, onMounted, inject } from 'vue';
 
 const openModal = inject('openServiceModal');
+const videoPlayer = ref(null);
 
 const phrases = ["LO CREAMOS.", "LO DISEÑAMOS.", "LO ESCALAMOS.", "LO IMPULSAMOS."];
 const currentPhrase = ref("");
@@ -78,6 +81,13 @@ const typeEffect = () => {
 
 onMounted(() => {
   typeEffect();
+  
+  // Force play for mobile devices / Low power mode
+  if (videoPlayer.value) {
+    videoPlayer.value.play().catch(err => {
+      console.log("Autoplay blocked, user interaction might be needed or battery saver is on.", err);
+    });
+  }
 });
 </script>
 
@@ -123,6 +133,7 @@ onMounted(() => {
   height: 100%;
   object-fit: cover;
   opacity: 0.5;
+  pointer-events: none;
 }
 
 .hero-overlay {
