@@ -39,7 +39,7 @@
         <div class="story-column fade-up">
           <h3 class="side-heading">Nuestra Filosofía</h3>
           <p class="story-text">
-            No somos una agencia convencional. En Helify, creemos que la tecnología debe ser invisible: una herramienta tan bien diseñada que simplemente funciona sin que tengas que pensar en ella.
+            En Helify, creemos que la tecnología debe ser invisible: una herramienta tan bien diseñada que simplemente funciona sin que tengas que pensar en ella.
           </p>
           <p class="story-text">
             Combinamos el rigor técnico con una visión de negocio disruptiva para entregar productos que no solo cumplen expectativas, sino que redefinen estándares.
