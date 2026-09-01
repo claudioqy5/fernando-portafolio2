@@ -3,77 +3,78 @@
     <!-- Static Title Section -->
     <div class="title-section">
       <div class="container">
-        <div class="text-reveal fade-up">
+        <div class="text-reveal fade-up header-flex">
           <h2 class="section-title">CASOS DE ÉXITO</h2>
-          <p class="section-subtitle">Transformamos problemas reales en soluciones digitales que funcionan. Cada caso de éxito refleja nuestro enfoque: entender la necesidad, diseñar con propósito y entregar resultados.</p>
+          <div class="subtitle-box">
+             <div class="auth-badge">
+               <span class="pulse-dot"></span>
+               <span>Autorizado por clientes</span>
+             </div>
+             <p class="section-subtitle">
+               Explora una selección de los proyectos digitales más destacados que hemos construido, compartidos públicamente con la autorización exclusiva de nuestros clientes.
+             </p>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Main Showcase Grid -->
-    <section class="projects-grid-section">
+    <!-- 3D Carousel Section with Swiper -->
+    <section class="projects-carousel-3d-section">
       <div class="container-wide">
-        <div class="projects-masonry">
-          <div 
+        <Swiper
+          :effect="'coverflow'"
+          :grabCursor="true"
+          :centeredSlides="true"
+          :slidesPerView="'auto'"
+          :loop="true"
+          :speed="5000"
+          :mousewheel="{ forceToAxis: true }"
+          :coverflowEffect="{
+            rotate: 25,
+            stretch: 0,
+            depth: 250,
+            modifier: 1,
+            slideShadows: true,
+          }"
+          :autoplay="{
+            delay: 0,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          }"
+          :modules="modules"
+          class="projects-swiper"
+        >
+          <SwiperSlide 
             v-for="(service, index) in services" 
             :key="index"
-            class="project-tile fade-up"
-            :class="`tile-${index + 1}`"
+            class="swiper-card"
             @click="openGallery(index)"
           >
-            <!-- Background Gallery -->
-            <div class="tile-bg">
-              <div class="slideshow-inner">
-                <template v-for="(asset, aIndex) in service.assets" :key="asset.src">
-                  <div 
-                    class="asset-layer"
-                    :class="{ 'active': isAssetActive(index, aIndex) }"
-                  >
-                    <video 
-                      v-if="asset.type === 'video'"
-                      autoplay muted loop playsinline class="tile-media"
-                    >
-                      <source :src="asset.src" type="video/mp4">
-                    </video>
-                    <img 
-                      v-else 
-                      :src="asset.src" 
-                      class="tile-media" 
-                      loading="lazy"
-                    />
-                  </div>
-                </template>
-              </div>
-              <!-- Lightened overlay for better background visibility -->
-              <div class="tile-overlay"></div>
+            <div class="card-media-wrapper">
+              <video 
+                v-if="service.assets[0].type === 'video'"
+                autoplay muted loop playsinline class="card-media"
+              >
+                <source :src="service.assets[0].src" type="video/mp4">
+              </video>
+              <img 
+                v-else 
+                :src="service.assets[0].src" 
+                class="card-media" 
+                loading="lazy"
+              />
             </div>
-
-            <!-- Content Overlay -->
-            <div class="tile-content">
-              <div class="content-header">
-                <span class="count">{{ service.assets.length }} ARCHIVOS</span>
-                <h3 class="tile-title">{{ service.title }}</h3>
-              </div>
-              <div class="content-footer">
-                <p class="tile-desc">{{ service.description }}</p>
-                <div class="view-btn">
-                  <span>Ver Galería</span>
-                  <div class="arrow">→</div>
-                </div>
+            
+            <div class="card-content-overlay">
+              <h3 class="card-title">{{ service.title }}</h3>
+              <p class="card-desc">{{ service.description }}</p>
+              <div class="view-btn">
+                <span>Ver Galería</span>
+                <div class="arrow">→</div>
               </div>
             </div>
-
-            <!-- Asset Progress Indicator -->
-            <div class="progress-bar-container">
-              <div 
-                v-for="(_, pIdx) in service.assets" 
-                :key="pIdx"
-                class="progress-segment"
-                :class="{ 'active': previewCycles[index] === pIdx }"
-              ></div>
-            </div>
-          </div>
-        </div>
+          </SwiperSlide>
+        </Swiper>
       </div>
     </section>
 
@@ -83,12 +84,17 @@
         <div v-if="selectedIndex !== null && services[selectedIndex]" class="gallery-modal" @click.self="resetSelection">
           <div class="modal-header">
             <div class="modal-info">
-              <span class="modal-index">CATEGORÍA 0{{ selectedIndex + 1 }}</span>
+              <span class="modal-index">PROYECTO 0{{ selectedIndex + 1 }}</span>
               <h2 class="modal-title">{{ services[selectedIndex].title }}</h2>
             </div>
             <button class="close-gallery" @click="resetSelection">
-              <span>VOLVER</span>
-              <div class="close-icon-circle">×</div>
+              <span>CERRAR</span>
+              <div class="close-icon-circle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </div>
             </button>
           </div>
 
@@ -128,8 +134,16 @@
           </div>
 
           <!-- Navigation -->
-          <button class="nav-arrow prev" @click="prevAsset">‹</button>
-          <button class="nav-arrow next" @click="nextAsset">›</button>
+          <button class="nav-arrow prev" @click="prevAsset">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <button class="nav-arrow next" @click="nextAsset">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
         </div>
       </Transition>
     </Teleport>
@@ -138,86 +152,123 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { EffectCoverflow, Autoplay, Mousewheel } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+
+const modules = [EffectCoverflow, Autoplay, Mousewheel];
 
 // Assets Imports
-import web1 from '../assets/materiales (fotos y videos)/Pagina web/Elegance Eventos/principal.JPG';
-import web2 from '../assets/materiales (fotos y videos)/Pagina web/Elegance Eventos/descripcion.JPG';
-import web3 from '../assets/materiales (fotos y videos)/Pagina web/Patitas spa/patitasSpa.JPG';
-import app1 from '../assets/materiales (fotos y videos)/Aplicaciones Web/NiñoSano/dashboard.JPG';
-import app2 from '../assets/materiales (fotos y videos)/Aplicaciones Web/NiñoSano/gestion de usuarios.JPG';
-import app3 from '../assets/materiales (fotos y videos)/Aplicaciones Web/NiñoSano/login.JPG';
-import app4 from '../assets/materiales (fotos y videos)/Aplicaciones Web/Colegio-X/dashboard.JPG';
-import app5 from '../assets/materiales (fotos y videos)/Aplicaciones Web/Colegio-X/cursos.JPG';
-import app6 from '../assets/materiales (fotos y videos)/Aplicaciones Web/Colegio-X/gestion de usuarios.JPG';
-import app7 from '../assets/materiales (fotos y videos)/Aplicaciones Web/Colegio-X/login.JPG';
-import eco1 from '../assets/materiales (fotos y videos)/E-commerce/principal.JPG';
-import eco2 from '../assets/materiales (fotos y videos)/E-commerce/categorias.JPG';
-import eco3 from '../assets/materiales (fotos y videos)/E-commerce/productos.JPG';
-import land1 from '../assets/materiales (fotos y videos)/Landing pages/ericka/efecto.mp4';
-import land2 from '../assets/materiales (fotos y videos)/Landing pages/ericka/principal.JPG';
-import port1 from '../assets/materiales (fotos y videos)/Portafolio digital/Claudio Portafolio digital.mp4';
-import port2 from '../assets/materiales (fotos y videos)/Portafolio digital/carlos Portafolio digital.mp4';
+import libFamurp1 from '../assets/materiales (fotos y videos)/Biblioteca FAMURP/bibliotecafamurp.png';
+
+import libVirtual1 from '../assets/materiales (fotos y videos)/Biblioteca Virtual y Especializada/bvedashboard.png';
+import libVirtual2 from '../assets/materiales (fotos y videos)/Biblioteca Virtual y Especializada/bvemapa.png';
+import libVirtual3 from '../assets/materiales (fotos y videos)/Biblioteca Virtual y Especializada/loginbve.png';
+
+import colx1 from '../assets/materiales (fotos y videos)/Colegio-X/dashboard.JPG';
+import colx2 from '../assets/materiales (fotos y videos)/Colegio-X/cursos.JPG';
+import colx3 from '../assets/materiales (fotos y videos)/Colegio-X/gestion de usuarios.JPG';
+import colx4 from '../assets/materiales (fotos y videos)/Colegio-X/login.JPG';
+
+import elegance1 from '../assets/materiales (fotos y videos)/Elegance Eventos/principal.JPG';
+import elegance2 from '../assets/materiales (fotos y videos)/Elegance Eventos/descripcion.JPG';
+
+import ericka1 from '../assets/materiales (fotos y videos)/ericka/efecto.mp4';
+import ericka2 from '../assets/materiales (fotos y videos)/ericka/principal.JPG';
+
+import nexoshop1 from '../assets/materiales (fotos y videos)/NexoShop/principal.JPG';
+import nexoshop2 from '../assets/materiales (fotos y videos)/NexoShop/categorias.JPG';
+import nexoshop3 from '../assets/materiales (fotos y videos)/NexoShop/productos.JPG';
+
+import ninosano1 from '../assets/materiales (fotos y videos)/NiñoSano/dashboard.JPG';
+import ninosano2 from '../assets/materiales (fotos y videos)/NiñoSano/gestion de usuarios.JPG';
+import ninosano3 from '../assets/materiales (fotos y videos)/NiñoSano/login.JPG';
+
+import patitas1 from '../assets/materiales (fotos y videos)/Patitas spa/patitasSpa.JPG';
+
+import portafolio1 from '../assets/materiales (fotos y videos)/Portafolio digital/Claudio Portafolio digital.mp4';
+import portafolio2 from '../assets/materiales (fotos y videos)/Portafolio digital/carlos Portafolio digital.mp4';
+
+import refcon1 from '../assets/materiales (fotos y videos)/REFCON mensajeria/dashboard.png';
+import refcon2 from '../assets/materiales (fotos y videos)/REFCON mensajeria/refconlogin.png';
+
+import ventassaas1 from '../assets/materiales (fotos y videos)/VentasSaas/dashboardventassaas.png';
+import ventassaas2 from '../assets/materiales (fotos y videos)/VentasSaas/carritocompras.png';
+import ventassaas3 from '../assets/materiales (fotos y videos)/VentasSaas/login.png';
+
+import vidaanimal1 from '../assets/materiales (fotos y videos)/Vida Animal/loginvida.png';
 
 const isVisible = ref(false);
 const selectedIndex = ref(null);
 const currentAssetIndex = ref(0);
-const previewCycles = ref([0, 0, 0, 0, 0]);
+
 const transitionName = ref('media-fade-next');
 
 const services = [
   {
-    title: "Páginas web",
-    description: "Diseños corporativos de alto impacto visual y elegancia.",
-    assets: [
-      { src: web1, type: 'image' },
-      { src: web2, type: 'image' },
-      { src: web3, type: 'image' }
-    ]
+    title: "Biblioteca FAMURP",
+    description: "Plataforma de gestión bibliotecaria y catálogo digital para estudiantes.",
+    assets: [ { src: libFamurp1, type: 'image' } ]
   },
   {
-    title: "Apps Institucionales",
-    description: "Sistemas robustos y dashboards de gestión avanzada.",
-    assets: [
-      { src: app3, type: 'image' }, { src: app2, type: 'image' }, { src: app1, type: 'image' },
-      { src: app7, type: 'image' }, { src: app4, type: 'image' }, { src: app5, type: 'image' }, 
-      { src: app6, type: 'image' }      
-    ]
+    title: "Biblioteca Virtual",
+    description: "Sistema avanzado de biblioteca digital con visualización de mapas y recursos.",
+    assets: [ { src: libVirtual1, type: 'image' }, { src: libVirtual2, type: 'image' }, { src: libVirtual3, type: 'image' } ]
   },
   {
-    title: "E-commerce",
-    description: "Tiendas virtuales optimizadas para máxima conversión.",
-    assets: [
-      { src: eco1, type: 'image' }, { src: eco2, type: 'image' }, { src: eco3, type: 'image' }
-    ]
+    title: "Colegio-X",
+    description: "Intranet educativa completa con gestión de cursos, usuarios y dashboard interactivo.",
+    assets: [ { src: colx1, type: 'image' }, { src: colx2, type: 'image' }, { src: colx3, type: 'image' }, { src: colx4, type: 'image' } ]
   },
   {
-    title: "Landing Page",
-    description: "Páginas de aterrizaje con tecnologías de última generación.",
-    assets: [
-      { src: land2, type: 'image' }, { src: land1, type: 'video' }
-    ]
+    title: "Elegance Eventos",
+    description: "Página web corporativa enfocada en la elegancia y presentación de servicios.",
+    assets: [ { src: elegance1, type: 'image' }, { src: elegance2, type: 'image' } ]
   },
   {
-    title: "Portafolio digital",
-    description: "Vitrinas interactivas para una marca personal de élite.",
-    assets: [
-      { src: port1, type: 'video' }, { src: port2, type: 'video' }
-    ]
+    title: "Landing Page Ericka",
+    description: "Landing page de alto impacto con videos de fondo y diseño moderno.",
+    assets: [ { src: ericka1, type: 'video' }, { src: ericka2, type: 'image' } ]
+  },
+  {
+    title: "NexoShop",
+    description: "Plataforma de comercio electrónico optimizada para conversión y categorías de productos.",
+    assets: [ { src: nexoshop1, type: 'image' }, { src: nexoshop2, type: 'image' }, { src: nexoshop3, type: 'image' } ]
+  },
+  {
+    title: "NiñoSano",
+    description: "Aplicación web de gestión de salud con dashboards de seguimiento para pacientes.",
+    assets: [ { src: ninosano1, type: 'image' }, { src: ninosano2, type: 'image' }, { src: ninosano3, type: 'image' } ]
+  },
+  {
+    title: "Patitas SPA",
+    description: "Sitio web para negocio de cuidado de mascotas con un diseño amigable y atractivo.",
+    assets: [ { src: patitas1, type: 'image' } ]
+  },
+  {
+    title: "Portafolios Digitales",
+    description: "Vitrinas interactivas para marca personal de alto nivel.",
+    assets: [ { src: portafolio1, type: 'video' }, { src: portafolio2, type: 'video' } ]
+  },
+  {
+    title: "REFCON Mensajería",
+    description: "Sistema de gestión logística y mensajería con paneles de control en tiempo real.",
+    assets: [ { src: refcon1, type: 'image' }, { src: refcon2, type: 'image' } ]
+  },
+  {
+    title: "VentasSaaS",
+    description: "Software as a Service para la gestión integral de ventas y carritos de compras.",
+    assets: [ { src: ventassaas1, type: 'image' }, { src: ventassaas2, type: 'image' }, { src: ventassaas3, type: 'image' } ]
+  },
+  {
+    title: "Vida Animal",
+    description: "Plataforma web enfocada en el cuidado y bienestar animal.",
+    assets: [ { src: vidaanimal1, type: 'image' } ]
   }
 ];
 
-let cycleInterval;
-const startCycle = () => {
-  cycleInterval = setInterval(() => {
-    previewCycles.value = previewCycles.value.map((current, idx) => {
-      return (current + 1) % services[idx].assets.length;
-    });
-  }, 3500);
-};
 
-const isAssetActive = (serviceIdx, assetIdx) => {
-  return previewCycles.value[serviceIdx] === assetIdx;
-};
 
 const openGallery = (idx) => {
   selectedIndex.value = idx;
@@ -246,76 +297,64 @@ const prevAsset = () => {
 };
 
 onMounted(() => {
-  startCycle();
+  // Carousel mounted
 });
 
 onUnmounted(() => {
-  clearInterval(cycleInterval); 
+  // Cleanup
 });
 </script>
 
 <style scoped>
 /* CSS styles truncated for brevity as they are presumed unchanged from previous successful intent */
 .projects-wrapper { background-color: #050505; min-height: 100vh; padding-bottom: 15vh; }
-.title-section { padding: 140px 0 60px; }
-.section-title { font-family: var(--font-heading); font-size: clamp(3rem, 10vw, 7.5rem); font-weight:300 ; color: #fff; letter-spacing: -4px; line-height: 0.85; margin-bottom: 2rem; }
-.section-subtitle { 
-  font-size: clamp(1.1rem, 2vw, 1.4rem); 
-  color: rgba(255,255,255,0.5);   
-  line-height: 1.6; 
-  margin-top: 2.5rem;
-  font-weight: 300;
-  letter-spacing: -0.01em;
+.title-section { padding: 140px 0 40px; }
+.header-flex { display: flex; flex-direction: column; gap: 2rem; }
+@media (min-width: 1024px) {
+  .header-flex { flex-direction: row; align-items: flex-end; justify-content: space-between; gap: 4rem; }
+  .section-title { margin-bottom: 0; }
+  .subtitle-box { margin-bottom: 15px; }
 }
-.projects-grid-section { padding: 0 40px; }
-.container-wide { max-width: 1900px; margin: 0 auto; }
-.projects-masonry { display: grid; grid-template-columns: repeat(12, 1fr); grid-auto-rows: 240px; gap: 1.5rem; }
-.project-tile { position: relative; border-radius: 32px; overflow: hidden; cursor: pointer; background: #111; }
-.tile-1 { grid-column: span 8; grid-row: span 2; }
-.tile-2 { grid-column: span 4; grid-row: span 3; }
-.tile-3 { grid-column: span 4; grid-row: span 2; }
-.tile-4 { grid-column: span 4; grid-row: span 1; }
-.tile-5 { grid-column: span 8; grid-row: span 1; }
-.tile-bg { position: absolute; inset: 0; z-index: 1; }
-.slideshow-inner { position: relative; width: 100%; height: 100%; }
-.asset-layer { position: absolute; inset: 0; opacity: 0; transition: opacity 1.2s ease-in-out, transform 8s linear; }
-.asset-layer.active { opacity: 1; transform: scale(1.05); }
-.tile-media { width: 100%; height: 100%; object-fit: cover; }
-.tile-media.bg-img { background-size: cover; background-position: center; }
-.tile-overlay {
-  position: absolute;
-  inset: 0;
-  /* Darkened overlay to improve text contrast */
-  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.2) 100%);
-  z-index: 2;
-  transition: opacity 0.4s ease;
-}
-.project-tile:hover .tile-overlay { background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 60%, rgba(0,0,0,0.3) 100%); }
-.tile-content { position: absolute; inset: 0; z-index: 5; padding: 3rem; display: flex; flex-direction: column; justify-content: space-between; }
-.count { font-family: var(--font-heading); font-size: 0.75rem; font-weight: 700; color: var(--accent-primary); letter-spacing: 2px; }
-.tile-title { font-size: clamp(1.8rem, 3vw, 3.5rem); font-weight: 800; color: #fff; line-height: 0.95; margin-top: 0.5rem; }
-.content-footer { transform: translateY(30px); opacity: 0; transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-.project-tile:hover .content-footer { transform: translateY(0); opacity: 1; }
-.tile-desc { font-size: 1rem; color: rgba(255,255,255,0.7); margin-bottom: 2rem; max-width: 80%; }
-.view-btn { display: flex; align-items: center; gap: 15px; color: #fff; font-weight: 700; letter-spacing: 1px; }
+.section-title { font-family: var(--font-heading); font-size: clamp(3rem, 10vw, 7.5rem); font-weight: 800; color: #fff; letter-spacing: -4px; line-height: 0.85; margin: 0; }
+.subtitle-box { max-width: 500px; display: flex; flex-direction: column; gap: 15px; border-left: 2px solid var(--accent-primary, #10b981); padding-left: 20px; }
+.auth-badge { display: inline-flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); padding: 8px 16px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); width: fit-content; }
+.auth-badge span:last-child { font-size: 0.75rem; font-weight: 700; color: #fff; letter-spacing: 1px; text-transform: uppercase; }
+.pulse-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; animation: pulse 2s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+.section-subtitle { font-size: clamp(1rem, 1.5vw, 1.1rem); color: rgba(255,255,255,0.7); line-height: 1.6; font-weight: 300; margin: 0; letter-spacing: 0; }
+.projects-carousel-3d-section { padding: 80px 0 120px; overflow: hidden; background: #050505; }
+.projects-swiper { width: 100%; padding-top: 50px; padding-bottom: 50px; }
+.projects-swiper :deep(.swiper-wrapper) { transition-timing-function: linear !important; }
+.swiper-card { width: 700px; height: 450px; border-radius: 24px; overflow: hidden; background: #111; box-shadow: 0 20px 50px rgba(0,0,0,0.8); cursor: pointer; position: relative; }
+
+.card-media-wrapper { width: 100%; height: 100%; position: absolute; inset: 0; }
+.card-media { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; transition: opacity 0.3s, transform 0.5s; }
+.swiper-slide-active .card-media { opacity: 1; }
+.swiper-card:hover .card-media { transform: scale(1.05); }
+
+.card-content-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.1) 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 40px; opacity: 0; transition: opacity 0.4s; }
+.swiper-slide-active:hover .card-content-overlay { opacity: 1; }
+
+.card-title { color: #fff; font-family: var(--font-heading); font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; transform: translateY(20px); transition: transform 0.4s; }
+.card-desc { color: rgba(255,255,255,0.7); font-size: 1.1rem; line-height: 1.5; margin-bottom: 20px; transform: translateY(20px); transition: transform 0.4s 0.1s; }
+.view-btn { display: flex; align-items: center; gap: 15px; color: var(--accent-primary, #fff); font-weight: 700; letter-spacing: 1px; transform: translateY(20px); transition: transform 0.4s 0.2s; }
 .arrow { width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
-.project-tile:hover .arrow { background: #fff; color: #000; }
-.progress-bar-container { position: absolute; top: 3rem; right: 3rem; z-index: 6; display: flex; gap: 6px; }
-.progress-segment { width: 30px; height: 2px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; }
-.progress-segment.active { background: var(--accent-primary); }
-.gallery-modal { position: fixed; inset: 0; z-index: 999999; background: #080808; display: flex; flex-direction: column; }
-.modal-header { padding: 30px 60px; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
-.modal-index { color: var(--accent-primary); font-weight: 700; letter-spacing: 3px; font-size: 0.8rem; }
-.modal-title { font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 800; color: #fff; line-height: 1.1; }
-.close-gallery { background: transparent; border: none; color: #fff; display: flex; align-items: center; gap: 20px; cursor: pointer; font-weight: 700; letter-spacing: 2px; }
-.close-icon-circle { width: 60px; height: 60px; border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; transition: all 0.4s ease; }
-.close-gallery:hover .close-icon-circle { background: #fff; color: #000; }
+.swiper-card:hover .arrow { background: #fff; color: #000; }
+.swiper-card:hover .card-title, .swiper-card:hover .card-desc, .swiper-card:hover .view-btn { transform: translateY(0); }
+.gallery-modal { position: fixed; inset: 0; z-index: 999999; background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(20px); display: flex; flex-direction: column; }
+.modal-header { padding: 40px 60px; display: flex; justify-content: space-between; align-items: center; z-index: 10; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.modal-index { color: var(--accent-primary, #10b981); font-weight: 700; letter-spacing: 4px; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 5px; display: block; }
+.modal-title { font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 800; color: #fff; line-height: 1.1; margin: 0; }
+.close-gallery { background: transparent; border: none; color: #fff; display: flex; align-items: center; gap: 15px; cursor: pointer; font-weight: 600; letter-spacing: 2px; transition: color 0.3s; }
+.close-icon-circle { width: 50px; height: 50px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.4s ease; background: rgba(255,255,255,0.03); }
+.close-gallery:hover { color: var(--accent-primary, #10b981); }
+.close-gallery:hover .close-icon-circle { background: #fff; color: #000; border-color: #fff; transform: rotate(90deg); }
 .gallery-body { flex: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; }
 .active-media-container { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; padding: 20px 40px; overflow: hidden; }
 .active-media { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
 .media-content { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 12px; box-shadow: 0 40px 80px rgba(0,0,0,0.8); }
-.nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: #fff; font-size: 5rem; opacity: 0.2; cursor: pointer; z-index: 20; padding: 2rem; transition: all 0.3s; }
-.nav-arrow:hover { opacity: 1; transform: translateY(-50%) scale(1.1); }
+.nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; width: 70px; height: 70px; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 20; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); backdrop-filter: blur(10px); }
+.nav-arrow:hover { background: #fff; color: #000; transform: translateY(-50%) scale(1.1); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
 .prev { left: 40px; }
 .next { right: 40px; }
 .thumbnails-container { padding: 20px 0 40px; display: flex; justify-content: center; }
@@ -331,6 +370,7 @@ onUnmounted(() => {
 .media-fade-next-leave-to { opacity: 0; transform: translateX(-100px) scale(0.9); }
 .media-fade-prev-enter-from { opacity: 0; transform: translateX(-100px) scale(0.9); }
 .media-fade-prev-leave-to { opacity: 0; transform: translateX(100px) scale(0.9); }
-@media (max-width: 1200px) { .projects-masonry { grid-template-columns: 1fr 1fr; grid-auto-rows: 400px; } .tile-1, .tile-2, .tile-3, .tile-4, .tile-5 { grid-column: span 1; grid-row: span 1; } .modal-header { padding: 40px; } .active-media-container { padding: 0 5%; } }
-@media (max-width: 768px) { .projects-masonry { grid-template-columns: 1fr; } }
+@media (max-width: 1200px) { .swiper-card { width: 550px; height: 350px; } .modal-header { padding: 40px; } .active-media-container { padding: 0 5%; } }
+@media (max-width: 768px) { .swiper-card { width: 350px; height: 450px; } }
+@media (max-width: 480px) { .swiper-card { width: 280px; height: 400px; } }
 </style>
