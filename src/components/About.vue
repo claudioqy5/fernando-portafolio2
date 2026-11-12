@@ -1,16 +1,43 @@
 <template>
   <section id="about" class="services-section">
     <div class="container-fluid">
-      <!-- Massive Title as 'NUESTROS SERVICIOS' -->
+      <!-- Header with DitherVeil on left & 'NUESTROS SERVICIOS' on right -->
       <div class="header-container container">
         <div class="header-content fade-up" ref="headerRef">
-          <h2 class="massive-title">
-            NUESTROS<br/>
-            SERVICIOS
-          </h2>
-          <p class="subtitle-text">
-            Cada servicio está pensado para resolver una necesidad real, no para usar tecnología por moda.
-          </p>
+          <div class="header-dither-col">
+            <div class="dither-card">
+              <DitherVeil
+                src="/statue-sculpture.jpg"
+                fit="contain"
+                pattern="floyd"
+                :pixelSize="2"
+                :levels="2"
+                palette="duotone"
+                inkColor="#b0b1a2"
+                paperColor="#ffffff"
+                :contrast="1.3"
+                :brightness="0.05"
+                :revealRadius="260"
+                :softness="0.6"
+                :linger="1"
+                rimColor="#ffffff"
+                :rim="0"
+                :reverse="false"
+                :wander="false"
+                clickBurst
+              />
+            </div>
+          </div>
+
+          <div class="header-text-col">
+            <h2 class="massive-title">
+              NUESTROS<br/>
+              SERVICIOS
+            </h2>
+            <p class="subtitle-text">
+              Cada servicio está pensado para resolver una necesidad real, no para usar tecnología por moda.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -47,6 +74,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
+import DitherVeil from './DitherVeil.vue';
 
 const headerRef = ref(null);
 
@@ -106,28 +134,100 @@ onMounted(() => {
 }
 
 .header-container {
-  margin-bottom: 80px;
+  margin-bottom: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.header-dither-col {
+  flex: 1 1 52%;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: -110px;
+  position: relative;
+  z-index: 3;
+}
+
+.dither-card {
+  width: 100%;
+  max-width: 680px;
+  height: 640px;
+  overflow: visible;
+  position: relative;
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 98%);
+  mask-image: linear-gradient(to bottom, black 75%, transparent 98%);
+}
+
+.header-text-col {
+  flex: 1 1 48%;
+  max-width: 620px;
+  padding-left: 20px;
+  z-index: 3;
 }
 
 .massive-title {
   font-family: var(--font-heading);
-  font-size: clamp(4rem, 15vw, 12rem);
+  font-size: clamp(3.2rem, 6.8vw, 7.5rem);
   font-weight: 800;
-  line-height: 0.85;
-  letter-spacing: -0.06em;
+  line-height: 0.88;
+  letter-spacing: -0.05em;
   color: #000;
   margin: 0;
   text-transform: uppercase;
 }
 
 .subtitle-text {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   color: #000;
-  margin-top: 30px;
-  max-width: 600px;
+  margin-top: 24px;
+  max-width: 500px;
   font-weight: 400;
   line-height: 1.4;
-  opacity: 0.8;
+  opacity: 0.85;
+}
+
+@media (max-width: 992px) {
+  .header-content {
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 30px;
+  }
+  
+  .header-dither-col {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: -40px;
+  }
+
+  .dither-card {
+    max-width: 100%;
+    height: 420px;
+  }
+
+  .header-text-col {
+    max-width: 100%;
+    padding-left: 0;
+    text-align: center;
+  }
+
+  .massive-title {
+    font-size: clamp(2.8rem, 10vw, 5rem);
+  }
+
+  .subtitle-text {
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 /* Marquee Logic */

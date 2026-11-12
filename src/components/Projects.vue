@@ -160,7 +160,13 @@ import 'swiper/css/effect-coverflow';
 const modules = [EffectCoverflow, Autoplay, Mousewheel];
 
 // Assets Imports
+import auto1 from '../assets/materiales (fotos y videos)/automatizaciones/agente de ventas whatsapp.JPG';
+import auto2 from '../assets/materiales (fotos y videos)/automatizaciones/tecnico administrativo whatsapp.JPG';
+
 import libFamurp1 from '../assets/materiales (fotos y videos)/Biblioteca FAMURP/bibliotecafamurp.png';
+
+import libLenguas1 from '../assets/materiales (fotos y videos)/Biblioteca Lenguas Modernas/inicio.JPG';
+import libLenguas2 from '../assets/materiales (fotos y videos)/Biblioteca Lenguas Modernas/login.JPG';
 
 import libVirtual1 from '../assets/materiales (fotos y videos)/Biblioteca Virtual y Especializada/bvedashboard.png';
 import libVirtual2 from '../assets/materiales (fotos y videos)/Biblioteca Virtual y Especializada/bvemapa.png';
@@ -193,11 +199,22 @@ import portafolio2 from '../assets/materiales (fotos y videos)/Portafolio digita
 import refcon1 from '../assets/materiales (fotos y videos)/REFCON mensajeria/dashboard.png';
 import refcon2 from '../assets/materiales (fotos y videos)/REFCON mensajeria/refconlogin.png';
 
+import reloj1 from "../assets/materiales (fotos y videos)/relojeria L'gant/inicio.JPG";
+import reloj2 from "../assets/materiales (fotos y videos)/relojeria L'gant/colecciones destacadas.JPG";
+import reloj3 from "../assets/materiales (fotos y videos)/relojeria L'gant/catalogo.JPG";
+import reloj4 from "../assets/materiales (fotos y videos)/relojeria L'gant/carrito de compras.JPG";
+
 import ventassaas1 from '../assets/materiales (fotos y videos)/VentasSaas/dashboardventassaas.png';
 import ventassaas2 from '../assets/materiales (fotos y videos)/VentasSaas/carritocompras.png';
 import ventassaas3 from '../assets/materiales (fotos y videos)/VentasSaas/login.png';
 
 import vidaanimal1 from '../assets/materiales (fotos y videos)/Vida Animal/loginvida.png';
+import vidaanimal2 from '../assets/materiales (fotos y videos)/Vida Animal/pos.JPG';
+import vidaanimal3 from '../assets/materiales (fotos y videos)/Vida Animal/chat bot.JPG';
+
+import vidaEcommerce1 from '../assets/materiales (fotos y videos)/Vida Animal ecommerce/inicio.JPG';
+import vidaEcommerce2 from '../assets/materiales (fotos y videos)/Vida Animal ecommerce/productos.JPG';
+import vidaEcommerce3 from '../assets/materiales (fotos y videos)/Vida Animal ecommerce/consultar boletas.JPG';
 
 const isVisible = ref(false);
 const selectedIndex = ref(null);
@@ -207,9 +224,19 @@ const transitionName = ref('media-fade-next');
 
 const services = [
   {
+    title: "Automatizaciones WhatsApp",
+    description: "Flujos automatizados y agentes inteligentes para ventas y soporte administrativo vía WhatsApp.",
+    assets: [ { src: auto1, type: 'image' }, { src: auto2, type: 'image' } ]
+  },
+  {
     title: "Biblioteca FAMURP",
     description: "Plataforma de gestión bibliotecaria y catálogo digital para estudiantes.",
     assets: [ { src: libFamurp1, type: 'image' } ]
+  },
+  {
+    title: "Biblioteca Lenguas Modernas",
+    description: "Portal digital y sistema de gestión de recursos bibliográficos para la escuela de lenguas.",
+    assets: [ { src: libLenguas1, type: 'image' }, { src: libLenguas2, type: 'image' } ]
   },
   {
     title: "Biblioteca Virtual",
@@ -257,14 +284,29 @@ const services = [
     assets: [ { src: refcon1, type: 'image' }, { src: refcon2, type: 'image' } ]
   },
   {
+    title: "Relojería L'gant",
+    description: "Boutique online de relojería de alta gama con vitrina destacada, catálogo interactivo y carrito de compras.",
+    assets: [
+      { src: reloj1, type: 'image' },
+      { src: reloj2, type: 'image' },
+      { src: reloj3, type: 'image' },
+      { src: reloj4, type: 'image' }
+    ]
+  },
+  {
     title: "VentasSaaS",
     description: "Software as a Service para la gestión integral de ventas y carritos de compras.",
     assets: [ { src: ventassaas1, type: 'image' }, { src: ventassaas2, type: 'image' }, { src: ventassaas3, type: 'image' } ]
   },
   {
     title: "Vida Animal",
-    description: "Plataforma web enfocada en el cuidado y bienestar animal.",
-    assets: [ { src: vidaanimal1, type: 'image' } ]
+    description: "Sistema integral veterinario con autenticación, punto de venta (POS) y chatbot de atención.",
+    assets: [ { src: vidaanimal1, type: 'image' }, { src: vidaanimal2, type: 'image' }, { src: vidaanimal3, type: 'image' } ]
+  },
+  {
+    title: "Vida Animal E-commerce",
+    description: "Tienda online completa con catálogo de productos veterinarios y módulo de consulta de boletas.",
+    assets: [ { src: vidaEcommerce1, type: 'image' }, { src: vidaEcommerce2, type: 'image' }, { src: vidaEcommerce3, type: 'image' } ]
   }
 ];
 

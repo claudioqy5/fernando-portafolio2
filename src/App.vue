@@ -43,6 +43,7 @@
             <select v-model="serviceForm.serviceType" required>
               <option value="" disabled>Selecciona un servicio</option>
               <option value="Desarrollo Web">Desarrollo Web / E-commerce</option>
+              <option value="Automatizaciones / Chatbots">Automatizaciones / Chatbots</option>
               <option value="Apps Móviles">Apps Móviles</option>
               <option value="Diseño UI/UX">Diseño UI/UX</option>
               <option value="Apps Institucionales">Apps Institucionales</option>
