@@ -83,23 +83,32 @@
       <Transition name="modal">
         <div v-if="selectedIndex !== null && services[selectedIndex]" class="gallery-modal" @click.self="resetSelection">
           <div class="modal-header">
-            <div class="modal-info">
+            <div class="modal-top-bar">
               <span class="modal-index">PROYECTO 0{{ selectedIndex + 1 }}</span>
-              <h2 class="modal-title">{{ services[selectedIndex].title }}</h2>
+              <button class="close-gallery" @click="resetSelection" aria-label="Cerrar galería">
+                <span class="close-label">CERRAR</span>
+                <div class="close-icon-circle">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </div>
+              </button>
             </div>
-            <button class="close-gallery" @click="resetSelection">
-              <span>CERRAR</span>
-              <div class="close-icon-circle">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </div>
-            </button>
+            <div class="modal-divider"></div>
+            <div class="modal-title-bar">
+              <h2 class="modal-title">{{ services[selectedIndex].title }}</h2>
+              <span class="modal-counter">{{ currentAssetIndex + 1 }} / {{ services[selectedIndex].assets.length }}</span>
+            </div>
           </div>
 
           <div class="gallery-body">
-            <div class="active-media-container">
+            <div 
+              class="active-media-container"
+              @touchstart.passive="onTouchStart"
+              @touchmove="onTouchMove"
+              @touchend="onTouchEnd"
+            >
               <Transition :name="transitionName" mode="out-in">
                 <div :key="services[selectedIndex].assets[currentAssetIndex].src" class="active-media">
                   <video 
@@ -338,6 +347,40 @@ const prevAsset = () => {
   currentAssetIndex.value = (currentAssetIndex.value - 1 + services[selectedIndex.value].assets.length) % services[selectedIndex.value].assets.length;
 };
 
+// Touch swipe logic for mobile
+let touchStartX = 0;
+let touchStartY = 0;
+let touchEndX = 0;
+let touchEndY = 0;
+
+const onTouchStart = (e) => {
+  if (!e.touches || e.touches.length !== 1) return;
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+  touchEndX = touchStartX;
+  touchEndY = touchStartY;
+};
+
+const onTouchMove = (e) => {
+  if (!e.touches || e.touches.length !== 1) return;
+  touchEndX = e.touches[0].clientX;
+  touchEndY = e.touches[0].clientY;
+};
+
+const onTouchEnd = () => {
+  const deltaX = touchEndX - touchStartX;
+  const deltaY = touchEndY - touchStartY;
+
+  // Horizontal swipe detected
+  if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
+    if (deltaX < 0) {
+      nextAsset(); // Swipe left -> next image
+    } else {
+      prevAsset(); // Swipe right -> prev image
+    }
+  }
+};
+
 onMounted(() => {
   // Carousel mounted
 });
@@ -383,18 +426,22 @@ onUnmounted(() => {
 .arrow { width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
 .swiper-card:hover .arrow { background: #fff; color: #000; }
 .swiper-card:hover .card-title, .swiper-card:hover .card-desc, .swiper-card:hover .view-btn { transform: translateY(0); }
-.gallery-modal { position: fixed; inset: 0; z-index: 999999; background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(20px); display: flex; flex-direction: column; }
-.modal-header { padding: 40px 60px; display: flex; justify-content: space-between; align-items: center; z-index: 10; border-bottom: 1px solid rgba(255,255,255,0.05); }
-.modal-index { color: var(--accent-primary, #10b981); font-weight: 700; letter-spacing: 4px; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 5px; display: block; }
-.modal-title { font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 800; color: #fff; line-height: 1.1; margin: 0; }
+.gallery-modal { position: fixed; inset: 0; z-index: 999999; background: rgba(10, 10, 10, 0.9); backdrop-filter: blur(20px); display: flex; flex-direction: column; }
+.modal-header { padding: 30px 60px 20px 60px; display: flex; flex-direction: column; gap: 14px; z-index: 10; }
+.modal-top-bar { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.modal-index { color: var(--accent-primary, #10b981); font-weight: 700; letter-spacing: 4px; font-size: 0.8rem; text-transform: uppercase; }
 .close-gallery { background: transparent; border: none; color: #fff; display: flex; align-items: center; gap: 15px; cursor: pointer; font-weight: 600; letter-spacing: 2px; transition: color 0.3s; }
-.close-icon-circle { width: 50px; height: 50px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.4s ease; background: rgba(255,255,255,0.03); }
+.close-icon-circle { width: 44px; height: 44px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.4s ease; background: rgba(255,255,255,0.04); }
 .close-gallery:hover { color: var(--accent-primary, #10b981); }
 .close-gallery:hover .close-icon-circle { background: #fff; color: #000; border-color: #fff; transform: rotate(90deg); }
+.modal-divider { width: 100%; height: 1px; background: rgba(255, 255, 255, 0.12); }
+.modal-title-bar { display: flex; justify-content: space-between; align-items: baseline; width: 100%; gap: 15px; }
+.modal-title { font-size: clamp(1.4rem, 2.5vw, 2.4rem); font-weight: 800; color: #fff; line-height: 1.15; margin: 0; flex: 1; }
+.modal-counter { color: rgba(255, 255, 255, 0.5); font-size: 0.85rem; font-weight: 600; letter-spacing: 1.5px; white-space: nowrap; }
 .gallery-body { flex: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; }
-.active-media-container { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; padding: 20px 40px; overflow: hidden; }
+.active-media-container { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; padding: 20px 40px; overflow: hidden; touch-action: pan-y; }
 .active-media { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
-.media-content { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 12px; box-shadow: 0 40px 80px rgba(0,0,0,0.8); }
+.media-content { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 12px; box-shadow: 0 40px 80px rgba(0,0,0,0.8); user-select: none; }
 .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%; width: 70px; height: 70px; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 20; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); backdrop-filter: blur(10px); }
 .nav-arrow:hover { background: #fff; color: #000; transform: translateY(-50%) scale(1.1); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
 .prev { left: 40px; }
@@ -412,7 +459,25 @@ onUnmounted(() => {
 .media-fade-next-leave-to { opacity: 0; transform: translateX(-100px) scale(0.9); }
 .media-fade-prev-enter-from { opacity: 0; transform: translateX(-100px) scale(0.9); }
 .media-fade-prev-leave-to { opacity: 0; transform: translateX(100px) scale(0.9); }
-@media (max-width: 1200px) { .swiper-card { width: 550px; height: 350px; } .modal-header { padding: 40px; } .active-media-container { padding: 0 5%; } }
-@media (max-width: 768px) { .swiper-card { width: 350px; height: 450px; } }
-@media (max-width: 480px) { .swiper-card { width: 280px; height: 400px; } }
+@media (max-width: 1200px) { .swiper-card { width: 550px; height: 350px; } .modal-header { padding: 30px 40px 18px; } .active-media-container { padding: 0 5%; } }
+@media (max-width: 768px) {
+  .swiper-card { width: 350px; height: 450px; }
+  .modal-header { padding: 16px 20px 12px; gap: 10px; }
+  .close-label { display: none; }
+  .close-icon-circle { width: 36px; height: 36px; }
+  .close-gallery { gap: 0; }
+  .modal-title { font-size: 1.28rem; line-height: 1.2; width: 100%; }
+  .modal-counter { font-size: 0.75rem; }
+  .nav-arrow { display: none !important; }
+  .active-media-container { padding: 10px 16px; }
+  .media-content { border-radius: 8px; }
+  .thumbnails-container { padding: 10px 0 24px; }
+  .thumbnails-track { max-width: 90vw; overflow-x: auto; padding: 6px; gap: 8px; }
+  .thumb { width: 65px; height: 42px; flex-shrink: 0; }
+}
+@media (max-width: 480px) {
+  .swiper-card { width: 280px; height: 400px; }
+  .modal-header { padding: 14px 16px 10px; }
+  .modal-title { font-size: 1.2rem; }
+}
 </style>

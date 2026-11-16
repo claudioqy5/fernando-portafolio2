@@ -177,31 +177,103 @@ body {
   position: fixed;
   bottom: 30px;
   right: 30px;
-  width: 65px;
-  height: 65px;
+  width: 66px;
+  height: 66px;
   z-index: 99999;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
-  animation: float-global-wa 3s ease-in-out infinite;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.25)) drop-shadow(0 0 16px rgba(37, 211, 102, 0.45));
+  animation: wa-heartbeat 2.4s ease-in-out infinite;
+  text-decoration: none;
+}
+
+/* Radar pulse ripple rings */
+.global-wa-btn::before,
+.global-wa-btn::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: rgba(37, 211, 102, 0.55);
+  z-index: -1;
+  pointer-events: none;
+  animation: wa-ripple 2.4s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
+
+.global-wa-btn::after {
+  animation-delay: 0.5s;
 }
 
 .global-wa-btn:hover {
-  transform: scale(1.1) translateY(-5px);
-  filter: drop-shadow(0 15px 25px rgba(37, 211, 102, 0.4));
+  transform: scale(1.15);
+  filter: drop-shadow(0 10px 25px rgba(37, 211, 102, 0.75)) drop-shadow(0 12px 30px rgba(0, 0, 0, 0.4));
+  animation-play-state: paused;
+}
+
+.global-wa-btn:hover::before,
+.global-wa-btn:hover::after {
+  animation-play-state: paused;
+  opacity: 0;
 }
 
 .wa-icon {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  transition: transform 0.3s ease;
 }
 
-@keyframes float-global-wa {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+.global-wa-btn:hover .wa-icon {
+  transform: scale(1.05);
+}
+
+/* Latido de corazón dinámico (Heartbeat) */
+@keyframes wa-heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  12% {
+    transform: scale(1.12);
+  }
+  24% {
+    transform: scale(1);
+  }
+  36% {
+    transform: scale(1.18);
+  }
+  48% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Ondas expansivas de pulso */
+@keyframes wa-ripple {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.85;
+  }
+  60% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .global-wa-btn {
+    bottom: 22px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+  }
 }
 
 /* Global Service Modal Styling */

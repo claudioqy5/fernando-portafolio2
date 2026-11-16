@@ -65,7 +65,7 @@
         <div class="footer-meta">
           <div class="brand">
             <span class="brand-name">HELIFY</span>
-            <span class="tagline">Boutique de Ingeniería Digital</span>
+            <span class="tagline">Estudio de Ingeniería Digital</span>
           </div>
           <div class="bottom-links">
             <a href="#hero">INICIO</a>

@@ -29,7 +29,7 @@
         </h2>
         <div class="intro-box">
           <p class="intro-text">
-            Somos una boutique de ingeniería digital enfocada en la simplicidad, la utilidad y el alto rendimiento.
+            Somos una estudio de ingeniería digital enfocada en la simplicidad, la utilidad y el alto rendimiento.
           </p>
         </div>
       </div>
@@ -179,10 +179,10 @@ onMounted(() => {
 
 .massive-title {
   font-family: var(--font-heading);
-  font-size: clamp(4rem, 15vw, 12rem);
+  font-size: clamp(2.4rem, 13vw, 12rem);
   font-weight: 300;
-  line-height: 0.85;
-  letter-spacing: -0.06em;
+  line-height: 0.88;
+  letter-spacing: -0.05em;
   color: #000;
   margin: 0;
 }
@@ -321,9 +321,15 @@ onMounted(() => {
 }
 
 @media (max-width: 768px) {
-  .who-we-are-section { padding: 100px 0; }
-  .intro-text { font-size: 1.2rem; }
-  .massive-title { font-size: 4rem; }
+  .who-we-are-section { padding: 90px 0; }
+  .header-content { margin-bottom: 60px; gap: 30px; }
+  .intro-box { padding-left: 20px; }
+  .intro-text { font-size: 1.15rem; }
+  .massive-title { font-size: clamp(2.2rem, 11.2vw, 3.8rem); line-height: 0.9; }
   .footer-meta { flex-direction: column; gap: 10px; align-items: center; }
+}
+
+@media (max-width: 480px) {
+  .massive-title { font-size: clamp(1.9rem, 10.5vw, 2.7rem); }
 }
 </style>
